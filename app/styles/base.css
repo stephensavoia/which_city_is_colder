@@ -1,0 +1,189 @@
+body {
+  background: radial-gradient(
+    circle at 25% 25%,
+    #c45757,
+    #5f61c9,
+    #634594,
+    #b34553
+  );
+  font-family: "Maven Pro", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+h1 {
+  color: #ffffff;
+  text-align: center;
+  font-family: "Jersey 20", sans-serif;
+  font-weight: 400;
+  font-size: 4rem;
+  cursor: default;
+}
+.game-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.city-card {
+  width: 250px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: aqua;
+  margin-top: 25px;
+  position: relative;
+}
+
+.city-card span {
+  display: block;
+  background-color: lightblue;
+  width: 100%;
+  font-size: 2.5rem;
+  text-align: center;
+  cursor: default;
+}
+
+.city-card .question {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  background-color: green;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.city-card .question.citySelected {
+  display: none;
+}
+
+.city-card .question span {
+  display: block;
+  background-color: red;
+  width: 100%;
+  text-align: center;
+  cursor: default;
+}
+
+.streak-info {
+  /* background-color: #ffffff; */
+  /* border-radius: 25px; */
+  margin-top: 20px;
+  cursor: default;
+  color: #ffffff;
+  text-align: center;
+  font-family: "Jersey 20", sans-serif;
+  font-weight: 400;
+  font-size: 2.5rem;
+}
+
+.instructions {
+  background-color: #ffffff;
+  padding: 5px 10px 6px 10px;
+  border-radius: 25px;
+  position: fixed;
+  bottom: 25px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.instructions .modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  display: none;
+  cursor: default;
+}
+
+.instructions .modal.active {
+  display: flex;
+}
+
+.instructions .modal .close-button {
+  margin-left: min(75%, 450px);
+  font-size: 20px;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 100%;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.instructions .modal .close-button svg {
+  display: block;
+}
+
+.instructions .modal .text {
+  background-color: red;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 25px;
+  border-radius: 25px;
+  width: 85%;
+  max-width: 500px;
+}
+
+.instructions .modal .text p {
+  line-height: 1.45;
+  margin-top: 15px;
+}
+
+.instructions .modal .text a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.instructions .modal .text a:hover {
+  color: rgba(255, 255, 255, 1);
+  text-decoration-thickness: 2px;
+}
+
+@media screen and (min-width: 990px) {
+  .game-container {
+    flex-direction: row;
+  }
+
+  h1 {
+    font-size: 5rem;
+  }
+
+  .city-card {
+    width: 300px;
+    height: 300px;
+  }
+}

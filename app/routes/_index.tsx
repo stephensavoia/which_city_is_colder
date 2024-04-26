@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useLoaderData } from "@remix-run/react";
+import { useState, useEffect } from "react";
+import { useLoaderData, useRevalidator } from "@remix-run/react";
 import { fetchWeatherApi } from 'openmeteo';
 import Instructions from "~/components/instructions";
 
@@ -9,22 +9,30 @@ export const loader = async () => {
 
   const randomCities = getTwoRandomCities();
 
+  let city1Temp = 0;
+  let city2Temp = 0;
   const url = "https://api.open-meteo.com/v1/forecast";
-  const params = {
-    "latitude": [randomCities[0].lat, randomCities[1].lat],
-    "longitude": [randomCities[0].long, randomCities[1].long],
-    "current": "temperature_2m"
-  };
 
-  const responses = await fetchWeatherApi(url, params);
-  const firstCityResponse = responses[0].current()!;
-  const secondCityResponse = responses[1].current()!;
+  while (city1Temp === city2Temp) {
+    const params = {
+      "latitude": [randomCities[0].lat, randomCities[1].lat],
+      "longitude": [randomCities[0].long, randomCities[1].long],
+      "current": "temperature_2m"
+    };
+
+    let responses = await fetchWeatherApi(url, params);
+    let firstCityResponse = responses[0].current()!;
+    let secondCityResponse = responses[1].current()!;
+
+    city1Temp = Math.round(firstCityResponse.variables(0)!.value());
+    city2Temp = Math.round(secondCityResponse.variables(0)!.value());
+  }
 
   const gameData = {
       firstCity: randomCities[0].city,
-      firstCityTemp: Math.round(firstCityResponse.variables(0)!.value()),
+      firstCityTemp: city1Temp,
       secondCity: randomCities[1].city,
-      secondCityTemp: Math.round(secondCityResponse.variables(0)!.value())
+      secondCityTemp: city2Temp
    };  
 
   return gameData;
@@ -32,20 +40,38 @@ export const loader = async () => {
 
 export default function Index() {
   const gameData = useLoaderData<typeof loader>();
+  console.log(gameData);
+  const revalidator = useRevalidator();
 
+  const [cityLoading, setCityLoading] = useState(false);
   const [citySelected, setCitySelected] = useState(false);
   const [score, setScore] = useState(0);
 
-  const handleCityClick = (event: React.MouseEvent<HTMLDivElement>): void => {
-    console.log(event.target);
+  const handleCityClick = (event: React.MouseEvent<HTMLElement>): void => {
     setCitySelected(true);
-    setScore(score + 1);
+    let playerChoice = (event.currentTarget as EventTarget & HTMLElement).id;
+    let correctChoice = gameData.firstCityTemp < gameData.secondCityTemp ? "city1" : "city2";
+
+    if (playerChoice === correctChoice) {
+      setScore(score + 1);
+    } else {
+      setTimeout( () => alert(`Game Over! Your score: ${score}`), 100);
+      setScore(0);
+    }
+
     console.log((event.target as EventTarget & HTMLElement).id);
-    setCitySelected(true);
     setTimeout(() => {
-      window.location.reload();
+      setCityLoading(true);
+      setCitySelected(false);
+      revalidator.revalidate();
     }, 2000);
   }
+
+  useEffect(() => {
+    if (revalidator.state === "idle") {
+      setCityLoading(false);
+    }
+  }, [revalidator]);
 
   return (
     <div className="main-container">
@@ -57,12 +83,18 @@ export default function Index() {
           <div id="city1" className={`question ${citySelected ? 'citySelected' : ''}`} onClick={handleCityClick}>
             <span>{gameData.firstCity}</span>
           </div>
+          <div className={`loading-spinner ${cityLoading ? '' : 'loaded'}`} hidden={revalidator.state === "idle"}>
+            <span>Loading...</span>
+          </div>
         </div>
         <div className="city-card">
           <span>{gameData.secondCity}</span>
           <span>{gameData.secondCityTemp}°C</span>
           <div id="city2" className={`question ${citySelected ? 'citySelected' : ''}`}  onClick={handleCityClick}>
             <span>{gameData.secondCity}</span>          
+          </div>
+          <div className={`loading-spinner ${cityLoading ? '' : 'loaded'}`}>
+            <span>Loading...</span>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLoaderData, useRevalidator } from "@remix-run/react";
 import { fetchWeatherApi } from 'openmeteo';
 import Instructions from "~/components/instructions";
+import LoadingSpinner from "~/components/loadingSpinner";
 
 import { getTwoRandomCities } from "~/data/cityLatLongData";
 
@@ -40,17 +41,20 @@ export const loader = async () => {
 
 export default function Index() {
   const gameData = useLoaderData<typeof loader>();
-  console.log(gameData);
   const revalidator = useRevalidator();
 
   const [cityLoading, setCityLoading] = useState(false);
   const [citySelected, setCitySelected] = useState(false);
   const [score, setScore] = useState(0);
+  const [correctCity, setCorrectCity] = useState(1); // For css styling of .city-card
 
   const handleCityClick = (event: React.MouseEvent<HTMLElement>): void => {
     setCitySelected(true);
     let playerChoice = (event.currentTarget as EventTarget & HTMLElement).id;
     let correctChoice = gameData.firstCityTemp < gameData.secondCityTemp ? "city1" : "city2";
+
+    
+    correctChoice === "city1" ? setCorrectCity(1) : setCorrectCity(2);
 
     if (playerChoice === correctChoice) {
       setScore(score + 1);
@@ -59,7 +63,6 @@ export default function Index() {
       setScore(0);
     }
 
-    console.log((event.target as EventTarget & HTMLElement).id);
     setTimeout(() => {
       setCityLoading(true);
       setCitySelected(false);
@@ -77,24 +80,24 @@ export default function Index() {
     <div className="main-container">
       <h1> WHICH CITY IS COLDER?</h1>
       <div className="game-container">
-        <div className="city-card">
+        <div className={`city-card ${ correctCity === 1 ? 'cold' : 'hot' }`}>
           <span>{gameData.firstCity}</span>
           <span>{gameData.firstCityTemp}°C</span>
           <div id="city1" className={`question ${citySelected ? 'citySelected' : ''}`} onClick={handleCityClick}>
             <span>{gameData.firstCity}</span>
           </div>
           <div className={`loading-spinner ${cityLoading ? '' : 'loaded'}`} hidden={revalidator.state === "idle"}>
-            <span>Loading...</span>
+            <LoadingSpinner />
           </div>
         </div>
-        <div className="city-card">
+        <div className={`city-card ${ correctCity === 2 ? 'cold' : 'hot' }`}>
           <span>{gameData.secondCity}</span>
           <span>{gameData.secondCityTemp}°C</span>
           <div id="city2" className={`question ${citySelected ? 'citySelected' : ''}`}  onClick={handleCityClick}>
             <span>{gameData.secondCity}</span>          
           </div>
           <div className={`loading-spinner ${cityLoading ? '' : 'loaded'}`}>
-            <span>Loading...</span>
+            <LoadingSpinner />
           </div>
         </div>
       </div>

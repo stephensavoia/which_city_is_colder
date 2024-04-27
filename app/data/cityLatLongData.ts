@@ -110,28 +110,3 @@ export function getTwoRandomCities() {
     }
     return [cities[randomNumber1], cities[randomNumber2]];
 }
-
-// export function getLatestComic() {
-//     return comics[0];
-// }
-
-// export function getComic(id: string) {
-//     const index = comics.findIndex((comic) => comic.id === id);
-//     if (index === -1) {
-//         return null;
-//     }
-
-//     const comic = comics[index];
-//     const prevComicImageUrl = index > 0 ? comics[index - 1].imageUrl : comics[index].imageUrl;
-//     const nextComicImageUrl = index < comics.length - 1 ? comics[index + 1].imageUrl : comics[index].imageUrl;
-
-//     return {
-//         ...comic,
-//         prevComicImageUrl,
-//         nextComicImageUrl
-//     };
-// }
-
-// export function getAllComics() {
-//     return comics;
-// }

@@ -8,14 +8,17 @@ import { getTwoRandomCities } from "~/data/cityLatLongData";
 
 export const loader = async () => {
 
-  const randomCities = getTwoRandomCities();
-
+  let randomCities = [
+                      {"city" : "Error", "lat" : 0, "long" : 0},
+                      {"city" : "Error", "lat" : 0, "long" : 0}
+                    ];
   let city1Temp = 0;
   let city2Temp = 0;
   const url = "https://api.open-meteo.com/v1/forecast";
 
-  while (city1Temp === city2Temp) {
-    const params = {
+  while (Math.abs(city1Temp - city2Temp) <= 4) {
+    randomCities = getTwoRandomCities();
+    let params = {
       "latitude": [randomCities[0].lat, randomCities[1].lat],
       "longitude": [randomCities[0].long, randomCities[1].long],
       "current": "temperature_2m"

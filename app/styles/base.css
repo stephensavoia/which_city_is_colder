@@ -28,7 +28,7 @@ h1 {
   text-align: center;
   font-family: "Jersey 20", sans-serif;
   font-weight: 400;
-  font-size: 4rem;
+  font-size: 3.5rem;
   cursor: default;
 }
 .game-container {
@@ -43,7 +43,7 @@ h1 {
 
 .city-card {
   width: 250px;
-  height: 250px;
+  height: 175px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -66,7 +66,7 @@ h1 {
   display: block;
   width: 100%;
   padding: 0 10px;
-  font-size: 2.5rem;
+  font-size: 2rem;
   text-align: center;
   cursor: default;
 }
@@ -77,8 +77,7 @@ h1 {
   flex-direction: column;
   justify-content: center;
   position: absolute;
-  background-color: rgb(56, 66, 210);
-  background: url("/backgroundtest.jpg") repeat center center;
+  background: #203298 url("/backgroundtest.jpg") repeat center center;
   background-size: 175px 175px;
   border-radius: 10px;
   width: 100%;
@@ -206,5 +205,8 @@ h1 {
   .city-card {
     width: 300px;
     height: 300px;
+  }
+  .city-card span {
+    font-size: 2.5rem;
   }
 }

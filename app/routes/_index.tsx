@@ -16,7 +16,7 @@ export const loader = async () => {
   let city2Temp = 0;
   const url = "https://api.open-meteo.com/v1/forecast";
 
-  while (Math.abs(city1Temp - city2Temp) <= 4) {
+  while (Math.abs(city1Temp - city2Temp) <= 5) {
     randomCities = getTwoRandomCities();
     let params = {
       "latitude": [randomCities[0].lat, randomCities[1].lat],

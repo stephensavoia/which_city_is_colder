@@ -62,7 +62,7 @@ export default function Index() {
     if (playerChoice === correctChoice) {
       setScore(score + 1);
     } else {
-      setTimeout( () => alert(`Game Over! Your score: ${score}`), 100);
+      setTimeout( () => alert(`Game Over!\nYour score: ${score}`), 100);
       setScore(0);
     }
 

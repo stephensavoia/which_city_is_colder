@@ -132,7 +132,8 @@ h1 {
   cursor: pointer;
 }
 
-.instructions .modal {
+.instructions .modal,
+.game-over-container {
   position: fixed;
   z-index: 1;
   left: 0;
@@ -148,6 +149,76 @@ h1 {
   justify-content: center;
   display: none;
   cursor: default;
+}
+
+@keyframes fadeIn {
+  from {
+    background-color: rgba(196, 87, 87, 0);
+  }
+  to {
+    background-color: rgba(196, 87, 87, 0.5);
+  }
+}
+
+.game-over-container {
+  animation: fadeIn 0.4s ease-in-out;
+  display: flex;
+  background-color: rgba(196, 87, 87, 0.5);
+  z-index: 0;
+}
+
+.game-over-container.hidden {
+  display: none;
+}
+
+@keyframes grow {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.game-over-modal {
+  animation: grow 0.5s ease-out;
+  background-color: #b34553;
+  background: radial-gradient(
+    circle at 50% 28%,
+    #b34553 0%,
+    #6e4592 20%,
+    #634594 30%,
+    #c45757 100%
+  );
+  height: 55%;
+  width: 85%;
+  max-width: 500px;
+  padding: 25px;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-over-modal h2 {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.game-over-modal button {
+  background-color: #ffffff;
+  padding: 10px 20px 12px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-family: "Maven Pro", sans-serif;
+  font-size: 1.25rem;
+  border: 0;
+  margin: 35px auto 5px auto;
+  display: block;
 }
 
 .instructions .modal.active {
@@ -169,7 +240,7 @@ h1 {
 }
 
 .instructions .modal .text {
-  background-color: red;
+  background-color: #000000;
   color: #ffffff;
   background-color: rgba(0, 0, 0, 0.85);
   padding: 25px;

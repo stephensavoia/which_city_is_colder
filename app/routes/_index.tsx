@@ -16,7 +16,7 @@ export const loader = async () => {
   let city2Temp = 0;
   const url = "https://api.open-meteo.com/v1/forecast";
 
-  while (Math.abs(city1Temp - city2Temp) <= 5) {
+  while (Math.abs(city1Temp - city2Temp) <= 4) {
     randomCities = getTwoRandomCities();
     let params = {
       "latitude": [randomCities[0].lat, randomCities[1].lat],
@@ -50,19 +50,21 @@ export default function Index() {
   const [citySelected, setCitySelected] = useState(false);
   const [score, setScore] = useState(0);
   const [correctCity, setCorrectCity] = useState(1); // For css styling of .city-card
+  const [gameOver, setGameOver] = useState(false);
+  const [finalScore, setFinalScore] = useState(0);
 
   const handleCityClick = (event: React.MouseEvent<HTMLElement>): void => {
     setCitySelected(true);
     let playerChoice = (event.currentTarget as EventTarget & HTMLElement).id;
     let correctChoice = gameData.firstCityTemp < gameData.secondCityTemp ? "city1" : "city2";
-
     
     correctChoice === "city1" ? setCorrectCity(1) : setCorrectCity(2);
 
     if (playerChoice === correctChoice) {
       setScore(score + 1);
     } else {
-      setTimeout( () => alert(`Game Over!\nYour score: ${score}`), 100);
+      setFinalScore(score);
+      setGameOver(true);
       setScore(0);
     }
 
@@ -106,6 +108,13 @@ export default function Index() {
       </div>
       <div className="streak-info">
         SCORE: { score }
+      </div>
+      <div className={`game-over-container ${gameOver ? '' : 'hidden'}`}>
+        <div className="game-over-modal">
+          <h1>Game Over!</h1>
+          <h2>Score: { finalScore }</h2>
+          <button onClick={() => setGameOver(false)}>Play Again</button>
+        </div>
       </div>
       <Instructions />
     </div>

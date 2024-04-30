@@ -124,6 +124,7 @@ h1 {
 
 .instructions {
   background-color: #ffffff;
+  color: rgb(18, 18, 18);
   padding: 5px 10px 6px 10px;
   border-radius: 25px;
   position: fixed;
@@ -163,7 +164,7 @@ h1 {
 .game-over-container {
   animation: fadeIn 0.4s ease-in-out;
   display: flex;
-  background-color: rgba(196, 87, 87, 0.5);
+  background-color: rgba(196, 87, 87, 0.65);
   z-index: 0;
 }
 
@@ -185,9 +186,8 @@ h1 {
   background-color: #b34553;
   background: radial-gradient(
     circle at 50% 28%,
-    #b34553 0%,
-    #6e4592 20%,
-    #634594 30%,
+    #a23c85 0%,
+    #864084 20%,
     #c45757 100%
   );
   height: 55%;
@@ -211,6 +211,7 @@ h1 {
 
 .game-over-modal button {
   background-color: #ffffff;
+  color: rgb(18, 18, 18);
   padding: 10px 20px 12px 20px;
   border-radius: 25px;
   cursor: pointer;

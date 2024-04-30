@@ -62,17 +62,18 @@ export default function Index() {
 
     if (playerChoice === correctChoice) {
       setScore(score + 1);
+      setTimeout(() => {
+        setCityLoading(true);
+        setCitySelected(false);
+        revalidator.revalidate();
+      }, 1000);
     } else {
-      setFinalScore(score);
-      setGameOver(true);
-      setScore(0);
+      setTimeout(() => {
+        setFinalScore(score);
+        setGameOver(true);
+        setScore(0);
+      }, 500);
     }
-
-    setTimeout(() => {
-      setCityLoading(true);
-      setCitySelected(false);
-      revalidator.revalidate();
-    }, 1000);
   }
 
   useEffect(() => {
@@ -113,7 +114,13 @@ export default function Index() {
         <div className="game-over-modal">
           <h1>Game Over!</h1>
           <h2>Score: { finalScore }</h2>
-          <button onClick={() => setGameOver(false)}>Play Again</button>
+          <button onClick={() => {
+            setGameOver(false);
+            setCityLoading(true);
+            setCitySelected(false);
+            revalidator.revalidate();
+          }
+          }>Play Again</button>
         </div>
       </div>
       <Instructions />

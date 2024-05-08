@@ -53,6 +53,20 @@ export default function Index() {
   const [gameOver, setGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
 
+  // My hacky way of doing this beause I don't know how to use localStorage in React
+  useEffect(() => {
+
+    if (!localStorage.getItem('highScore')) {
+      localStorage.setItem('highScore', '0');
+    }
+
+    if (finalScore > parseInt(localStorage.getItem('highScore')!)) {
+      localStorage.setItem('highScore', finalScore.toString());
+    }
+
+    document.getElementById('highScore')!.innerText = `High Score: ${localStorage.getItem('highScore')}`;
+  }, [finalScore]);
+
   const handleCityClick = (event: React.MouseEvent<HTMLElement>): void => {
     setCitySelected(true);
     let playerChoice = (event.currentTarget as EventTarget & HTMLElement).id;
@@ -114,6 +128,7 @@ export default function Index() {
         <div className="game-over-modal">
           <h1>Game Over!</h1>
           <h2>Score: { finalScore }</h2>
+          <h2 id="highScore">High Score: 0</h2>
           <button onClick={() => {
             setGameOver(false);
             setCityLoading(true);

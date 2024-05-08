@@ -5,7 +5,6 @@ import Instructions from "~/components/instructions";
 import LoadingSpinner from "~/components/loadingSpinner";
 
 import { getTwoRandomCities } from "~/data/cityLatLongData";
-import { s } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
 
 export const loader = async () => {
 
@@ -53,11 +52,6 @@ export default function Index() {
   const [correctCity, setCorrectCity] = useState(1); // For css styling of .city-card
   const [gameOver, setGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
-  const [highScore, setHighScore] = useState("0");
-
-  useEffect(() => {
-    setHighScore(localStorage.getItem('highScore') || "0");
-  }, []);
 
   const handleCityClick = (event: React.MouseEvent<HTMLElement>): void => {
     setCitySelected(true);
@@ -87,18 +81,6 @@ export default function Index() {
       setCityLoading(false);
     }
   }, [revalidator]);
-
-  useEffect(() => {
-    if (highScore === "0") {
-      localStorage.setItem('highScore', finalScore.toString());
-      setHighScore(finalScore.toString());
-    } else { 
-      if (finalScore > parseInt(highScore)) {
-        localStorage.setItem('highScore', finalScore.toString());
-        setHighScore(finalScore.toString());
-      }
-    }
-  }, [finalScore]);
 
   return (
     <div className="main-container">
@@ -132,7 +114,6 @@ export default function Index() {
         <div className="game-over-modal">
           <h1>Game Over!</h1>
           <h2>Score: { finalScore }</h2>
-          <h2>High Score: { highScore }</h2>
           <button onClick={() => {
             setGameOver(false);
             setCityLoading(true);

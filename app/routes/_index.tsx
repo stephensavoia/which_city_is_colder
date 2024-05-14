@@ -42,10 +42,17 @@ export const loader = async () => {
   return gameData;
 };
 
-export default function Index() {
-  const gameData = useLoaderData<typeof loader>();
-  const revalidator = useRevalidator();
+type GameData = {
+  firstCity: string;
+  firstCityTemp: number;
+  secondCity: string;
+  secondCityTemp: number;
+}
 
+export default function Index() {
+  const loadedGameData = useLoaderData<typeof loader>();
+  const [gameData, setGameData] = useState<GameData>(loadedGameData);
+  const revalidator = useRevalidator();
   const [cityLoading, setCityLoading] = useState(false);
   const [citySelected, setCitySelected] = useState(false);
   const [score, setScore] = useState(0);
@@ -65,17 +72,18 @@ export default function Index() {
 
   const handleCityClick = (event: React.MouseEvent<HTMLElement>): void => {
     setCitySelected(true);
+    revalidator.revalidate();
+
     let playerChoice = (event.currentTarget as EventTarget & HTMLElement).id;
     let correctChoice = gameData.firstCityTemp < gameData.secondCityTemp ? "city1" : "city2";
     
     correctChoice === "city1" ? setCorrectCity(1) : setCorrectCity(2);
-
+    
     if (playerChoice === correctChoice) {
       setScore(score + 1);
       setTimeout(() => {
         setCityLoading(true);
         setCitySelected(false);
-        revalidator.revalidate();
       }, 1000);
     } else {
       setTimeout(() => {
@@ -94,10 +102,11 @@ export default function Index() {
   }
 
   useEffect(() => {
-    if (revalidator.state === "idle") {
+    if (revalidator.state === "idle" && cityLoading === true) {
+      setGameData(loadedGameData);
       setCityLoading(false);
     }
-  }, [revalidator]);
+  }, [revalidator.state, cityLoading]);
 
   return (
     <div className="main-container">

@@ -42,8 +42,28 @@ export const loader = async () => {
   return gameData;
 };
 
+type GameData = {
+  firstCity: string;
+  firstCityTemp: number;
+  secondCity: string;
+  secondCityTemp: number;
+}
+
+const firstData: GameData = {
+  firstCity: "NEW GAME",
+  firstCityTemp: 0,
+  secondCity: "NEW GAME",
+  secondCityTemp: 0
+};
+
 export default function Index() {
-  const gameData = useLoaderData<typeof loader>();
+  const loadedGameData = useLoaderData<typeof loader>();
+  const [gameData, setGameData] = useState<GameData>(firstData);
+
+  if (gameData.firstCity === "NEW GAME") {
+    setGameData(loadedGameData);
+  }
+  
   const revalidator = useRevalidator();
 
   const [cityLoading, setCityLoading] = useState(false);
@@ -55,15 +75,12 @@ export default function Index() {
 
   // My hacky way of doing this beause I don't know how to use localStorage in React
   useEffect(() => {
-
     if (!localStorage.getItem('highScore')) {
       localStorage.setItem('highScore', '0');
     }
-
     if (finalScore > parseInt(localStorage.getItem('highScore')!)) {
       localStorage.setItem('highScore', finalScore.toString());
     }
-
     document.getElementById('highScore')!.innerText = `High Score: ${localStorage.getItem('highScore')}`;
   }, [finalScore]);
 
@@ -76,10 +93,11 @@ export default function Index() {
 
     if (playerChoice === correctChoice) {
       setScore(score + 1);
+      revalidator.revalidate();
       setTimeout(() => {
         setCityLoading(true);
         setCitySelected(false);
-        revalidator.revalidate();
+        setGameData(loadedGameData);
       }, 1000);
     } else {
       setTimeout(() => {
@@ -90,11 +108,19 @@ export default function Index() {
     }
   }
 
+  const handlePlayAgain = () => {
+    setGameOver(false);
+    setCityLoading(true);
+    setCitySelected(false);
+    setGameData(loadedGameData);
+    revalidator.revalidate();
+  }
+
   useEffect(() => {
     if (revalidator.state === "idle") {
       setCityLoading(false);
     }
-  }, [revalidator]);
+  }, [gameData]);
 
   return (
     <div className="main-container">
@@ -129,13 +155,7 @@ export default function Index() {
           <h1>Game Over!</h1>
           <h2>Score: { finalScore }</h2>
           <h2 id="highScore">High Score: 0</h2>
-          <button onClick={() => {
-            setGameOver(false);
-            setCityLoading(true);
-            setCitySelected(false);
-            revalidator.revalidate();
-          }
-          }>Play Again</button>
+          <button onClick={handlePlayAgain}>Play Again</button>
         </div>
       </div>
       <Instructions />

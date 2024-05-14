@@ -59,6 +59,8 @@ const firstData: GameData = {
 export default function Index() {
   const loadedGameData = useLoaderData<typeof loader>();
   const [gameData, setGameData] = useState<GameData>(firstData);
+  console.log(loadedGameData);
+  console.log(gameData);
 
   if (gameData.firstCity === "NEW GAME") {
     setGameData(loadedGameData);
@@ -111,7 +113,7 @@ export default function Index() {
     setGameOver(false);
     setCityLoading(true);
     setCitySelected(false);
-    setGameData(loadedGameData);
+    setGameData(firstData);
     revalidator.revalidate();
   }
 
@@ -119,7 +121,7 @@ export default function Index() {
     if (revalidator.state === "idle") {
       setCityLoading(false);
     }
-  }, [gameData]);
+  });
 
   return (
     <div className="main-container">

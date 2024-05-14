@@ -73,7 +73,6 @@ export default function Index() {
   const [gameOver, setGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
 
-  // My hacky way of doing this beause I don't know how to use localStorage in React
   useEffect(() => {
     if (!localStorage.getItem('highScore')) {
       localStorage.setItem('highScore', '0');

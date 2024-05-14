@@ -42,30 +42,8 @@ export const loader = async () => {
   return gameData;
 };
 
-type GameData = {
-  firstCity: string;
-  firstCityTemp: number;
-  secondCity: string;
-  secondCityTemp: number;
-}
-
-const firstData: GameData = {
-  firstCity: "NEW GAME",
-  firstCityTemp: 0,
-  secondCity: "NEW GAME",
-  secondCityTemp: 0
-};
-
 export default function Index() {
-  const loadedGameData = useLoaderData<typeof loader>();
-  const [gameData, setGameData] = useState<GameData>(firstData);
-  console.log(loadedGameData);
-  console.log(gameData);
-
-  if (gameData.firstCity === "NEW GAME") {
-    setGameData(loadedGameData);
-  }
-  
+  const gameData = useLoaderData<typeof loader>();
   const revalidator = useRevalidator();
 
   const [cityLoading, setCityLoading] = useState(false);
@@ -94,11 +72,10 @@ export default function Index() {
 
     if (playerChoice === correctChoice) {
       setScore(score + 1);
-      revalidator.revalidate();
       setTimeout(() => {
         setCityLoading(true);
         setCitySelected(false);
-        setGameData(loadedGameData);
+        revalidator.revalidate();
       }, 1000);
     } else {
       setTimeout(() => {
@@ -113,7 +90,6 @@ export default function Index() {
     setGameOver(false);
     setCityLoading(true);
     setCitySelected(false);
-    setGameData(firstData);
     revalidator.revalidate();
   }
 
@@ -121,7 +97,7 @@ export default function Index() {
     if (revalidator.state === "idle") {
       setCityLoading(false);
     }
-  });
+  }, [revalidator]);
 
   return (
     <div className="main-container">

@@ -121,7 +121,7 @@ export default function Index() {
     if (revalidator.state === "idle") {
       setCityLoading(false);
     }
-  });
+  }, [revalidator]);
 
   return (
     <div className="main-container">

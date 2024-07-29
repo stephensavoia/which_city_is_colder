@@ -69,6 +69,7 @@ export function ErrorBoundary() {
   const error = useRouteError();
   let errorHeading = "An error occurred";
   let errorMessage = "Opps! Something went wrong. Please try again later.";
+  console.log(error);
 
   if (isRouteErrorResponse(error)) {
     switch (error.status) {

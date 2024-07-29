@@ -43,12 +43,9 @@ export const loader = async () => {
     return gameData;
   } catch (error) {
     console.error("Failed to fetch weather data:", error);
-    return {
-      firstCity: "Error",
-      firstCityTemp: 0,
-      secondCity: "Error",
-      secondCityTemp: 0,
-    };
+    throw new Error(
+      `Open-meteo API didn't return data. Original error: ${error}`
+    );
   }
 };
 

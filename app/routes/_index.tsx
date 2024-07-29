@@ -16,30 +16,40 @@ export const loader = async () => {
   let city2Temp = 0;
   const url = "https://api.open-meteo.com/v1/forecast";
 
-  while (Math.abs(city1Temp - city2Temp) <= 4) {
-    randomCities = getTwoRandomCities();
-    let params = {
-      latitude: [randomCities[0].lat, randomCities[1].lat],
-      longitude: [randomCities[0].long, randomCities[1].long],
-      current: "temperature_2m",
+  try {
+    while (Math.abs(city1Temp - city2Temp) <= 4) {
+      randomCities = getTwoRandomCities();
+      let params = {
+        latitude: [randomCities[0].lat, randomCities[1].lat],
+        longitude: [randomCities[0].long, randomCities[1].long],
+        current: "temperature_2m",
+      };
+
+      let responses = await fetchWeatherApi(url, params);
+      let firstCityResponse = responses[0].current()!;
+      let secondCityResponse = responses[1].current()!;
+
+      city1Temp = Math.round(firstCityResponse.variables(0)!.value());
+      city2Temp = Math.round(secondCityResponse.variables(0)!.value());
+    }
+
+    const gameData = {
+      firstCity: randomCities[0].city,
+      firstCityTemp: city1Temp,
+      secondCity: randomCities[1].city,
+      secondCityTemp: city2Temp,
     };
 
-    let responses = await fetchWeatherApi(url, params);
-    let firstCityResponse = responses[0].current()!;
-    let secondCityResponse = responses[1].current()!;
-
-    city1Temp = Math.round(firstCityResponse.variables(0)!.value());
-    city2Temp = Math.round(secondCityResponse.variables(0)!.value());
+    return gameData;
+  } catch (error) {
+    console.error("Failed to fetch weather data:", error);
+    return {
+      firstCity: "Error",
+      firstCityTemp: 0,
+      secondCity: "Error",
+      secondCityTemp: 0,
+    };
   }
-
-  const gameData = {
-    firstCity: randomCities[0].city,
-    firstCityTemp: city1Temp,
-    secondCity: randomCities[1].city,
-    secondCityTemp: city2Temp,
-  };
-
-  return gameData;
 };
 
 type GameData = {

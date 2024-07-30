@@ -43,9 +43,13 @@ export const loader = async () => {
     return gameData;
   } catch (error) {
     console.error("Failed to fetch weather data:", error);
-    throw new Error(
-      `Open-meteo API didn't return data. Original error: ${error}`
-    );
+    const gameData = {
+      firstCity: "Error",
+      firstCityTemp: 0,
+      secondCity: "Error",
+      secondCityTemp: 0,
+    };
+    return gameData;
   }
 };
 
@@ -59,6 +63,24 @@ type GameData = {
 export default function Index() {
   const loadedGameData = useLoaderData<typeof loader>();
   const [gameData, setGameData] = useState<GameData>(loadedGameData);
+
+  if (gameData.firstCity === "Error" && gameData.secondCity === "Error") {
+    return (
+      <div className="main-container">
+        <h1>API ACCESS BLOCKED</h1>
+        <p className="error-message-container">
+          If you're reading this message, it means that Open-Meteo has blocked
+          Cloudflare Pages from accessing its free weather data API. You can
+          still access this project's code on{" "}
+          <a href="https://github.com/stephensavoia/which_city_is_colder">
+            GitHub
+          </a>{" "}
+          and play the game by running the project locally.
+        </p>
+      </div>
+    );
+  }
+
   const revalidator = useRevalidator();
   const [cityLoading, setCityLoading] = useState(false);
   const [citySelected, setCitySelected] = useState(false);

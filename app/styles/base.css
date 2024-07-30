@@ -290,3 +290,28 @@ h1 {
     font-size: 2.5rem;
   }
 }
+
+/* Error message */
+.error-message-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 20px auto 0 auto;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 25px;
+  border-radius: 25px;
+  width: 85%;
+  max-width: 500px;
+  margin-bottom: 15px;
+  line-height: 1.45;
+}
+.error-message-container a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.error-message-container a:hover {
+  color: rgba(255, 255, 255, 1);
+  text-decoration-thickness: 2px;
+}
